@@ -12,7 +12,7 @@ namespace api.Controllers
 
         public IHttpActionResult GetVersion()
         {
-            var version = new Version(){Software = 1};
+            var version = new Version {Software = 1};
 
             return Ok(version);
         }
