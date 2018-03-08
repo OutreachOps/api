@@ -9,6 +9,7 @@ namespace api.Controllers
 {
     public class Version
     {
+        [Key]
         public int VersionId { get; set; }
         public string DatabaseVersion { get; set; }
 
