@@ -7,12 +7,15 @@ using Dapper.Contrib.Extensions;
 
 namespace api.Controllers
 {
+
+
     public class Version
     {
         [Key]
         public int VersionId { get; set; }
         public string DatabaseVersion { get; set; }
 
+        [Computed]
         public string SoftwareVersion { get; set; }
     }
 
