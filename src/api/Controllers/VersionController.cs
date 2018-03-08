@@ -7,7 +7,7 @@ using Dapper.Contrib.Extensions;
 
 namespace api.Controllers
 {
-    public class Version
+    public class version
     {
         [Key]
         public int VersionId { get; set; }
@@ -23,7 +23,7 @@ namespace api.Controllers
         {
 
 
-            Version item = null;
+            version item = null;
             try
             {
                 var connectionstring = ConfigurationManager.ConnectionStrings["ReadWriteConnectionString"];
@@ -31,7 +31,7 @@ namespace api.Controllers
                 {
                     sqlConnection.Open();
 
-                    item = sqlConnection.Get<Version>(1);
+                    item = sqlConnection.Get<version>(1);
 
                     sqlConnection.Close();
 
@@ -40,7 +40,7 @@ namespace api.Controllers
             catch (Exception ex)
             {
                 if (item == null)
-                    item = new Version();
+                    item = new version();
 
                 item.SoftwareVersion = ex.ToString();
             }
