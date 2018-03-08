@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.Http;
@@ -19,24 +20,32 @@ namespace api.Controllers
 
         public IHttpActionResult GetVersion()
         {
-            
 
-            Version item;
-            var connectionstring = ConfigurationManager.ConnectionStrings["ReadWriteConnectionString"];
-            using (IDbConnection sqlConnection = new SqlConnection(connectionstring.ConnectionString))
+
+            Version item = null;
+            try
             {
-                sqlConnection.Open();
+                var connectionstring = ConfigurationManager.ConnectionStrings["ReadWriteConnectionString"];
+                using (IDbConnection sqlConnection = new SqlConnection(connectionstring.ConnectionString))
+                {
+                    sqlConnection.Open();
 
-                item = sqlConnection.Get<Version>(1);
+                    item = sqlConnection.Get<Version>(1);
 
-                sqlConnection.Close();
+                    sqlConnection.Close();
 
+                }
+            }
+            catch (Exception ex)
+            {
+                if (item == null)
+                    item = new Version();
+
+                item.SoftwareVersion = ex.ToString();
             }
 
-            if (item == null)
-                item = new Version();
 
-            item.SoftwareVersion = "1";
+
 
             return Ok(item);
         }
