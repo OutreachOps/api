@@ -36,8 +36,6 @@ namespace api.Controllers
 
                     item = sqlConnection.Get<Version>(1);
 
-                    sqlConnection.Insert(new Version {DatabaseVersion = "A New DatabaseVersion"});
-
                     sqlConnection.Close();
 
                     item.SoftwareVersion = "1";
