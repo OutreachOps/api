@@ -1,10 +1,17 @@
-﻿using System.Web.Http;
+﻿using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Web.Http;
+using Dapper.Contrib.Extensions;
 
 namespace api.Controllers
 {
     public class Version
     {
-        public int Software { get; set; }
+        public int VersionId { get; set; }
+        public string DatabaseVersion { get; set; }
+
+        public string SoftwareVersion { get; set; }
     }
 
     public class VersionController : ApiController
@@ -12,9 +19,26 @@ namespace api.Controllers
 
         public IHttpActionResult GetVersion()
         {
-            var version = new Version {Software = 1};
+            
 
-            return Ok(version);
+            Version item;
+            var connectionstring = ConfigurationManager.ConnectionStrings["ReadWriteConnectionString"];
+            using (IDbConnection sqlConnection = new SqlConnection(connectionstring.ConnectionString))
+            {
+                sqlConnection.Open();
+
+                item = sqlConnection.Get<Version>(1);
+
+                sqlConnection.Close();
+
+            }
+
+            if (item == null)
+                item = new Version();
+
+            item.SoftwareVersion = "1";
+
+            return Ok(item);
         }
     }
 }
