@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Web.Http;
+using System.IO;
 using Dapper.Contrib.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
-namespace api.Controllers
+namespace OutreachOperations.Api.Controllers
 {
-
-
     public class Version
     {
         [Key]
@@ -19,18 +18,32 @@ namespace api.Controllers
         public string SoftwareVersion { get; set; }
     }
 
-    public class VersionController : ApiController
+
+    [Route("version")]
+    public class VersionController : Controller
     {
+        private readonly IConfigurationRoot _configuration;
 
-        public IHttpActionResult GetVersion()
+        public VersionController()
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
 
+            _configuration = builder.Build();
+        }
+
+        [HttpGet]
+        public IActionResult GetVersion()
+        {
+            this._configuration
+                .GetConnectionString("DefaultConnection");
 
             Version item = null;
             try
             {
-                var connectionstring = ConfigurationManager.ConnectionStrings["ReadWriteConnectionString"];
-                using (IDbConnection sqlConnection = new SqlConnection(connectionstring.ConnectionString))
+                var connectionstring = _configuration.GetConnectionString("ReadWriteConnectionString");
+                using (IDbConnection sqlConnection = new SqlConnection(connectionstring))
                 {
                     sqlConnection.Open();
 
@@ -48,9 +61,6 @@ namespace api.Controllers
 
                 item.SoftwareVersion = ex.ToString();
             }
-
-
-
 
             return Ok(item);
         }
