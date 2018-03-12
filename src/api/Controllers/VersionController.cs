@@ -28,7 +28,8 @@ namespace OutreachOperations.Api.Controllers
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables();
 
             _configuration = builder.Build();
         }
