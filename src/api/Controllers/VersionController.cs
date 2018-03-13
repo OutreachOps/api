@@ -22,24 +22,16 @@ namespace OutreachOperations.Api.Controllers
     [Route("version")]
     public class VersionController : Controller
     {
-        private readonly IConfigurationRoot _configuration;
+        private readonly IConfiguration _configuration;
 
-        public VersionController()
+        public VersionController(IConfiguration config)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .AddEnvironmentVariables();
-
-            _configuration = builder.Build();
+            _configuration = config;
         }
 
         [HttpGet]
         public IActionResult GetVersion()
         {
-            this._configuration
-                .GetConnectionString("DefaultConnection");
-
             Version item = null;
             try
             {
