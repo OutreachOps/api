@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace OutreachOperations.Api.Controllers
+namespace OutreachOperations.Api.Controllers.Security
 {
-    [Route("auth")]
-    public class AuthController : Controller
+    [Route("login")]
+    public class LoginController : Controller
     {
         private readonly IConfiguration _configuration;
 
-        public AuthController(IConfiguration configuration)
+        public LoginController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
