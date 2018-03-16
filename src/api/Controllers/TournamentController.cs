@@ -17,7 +17,7 @@ namespace OutreachOperations.Api.Controllers
         [HttpPost]
         public IActionResult CreateTournaments([FromBody] Tournament request)
         {
-            return null;
+            return Ok();
         }
 
     }

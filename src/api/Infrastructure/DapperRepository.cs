@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using Api.Domain;
 using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Configuration;
+using OutreachOperations.Api.Domain;
 
 namespace OutreachOperations.Api.Infrastructure
 {

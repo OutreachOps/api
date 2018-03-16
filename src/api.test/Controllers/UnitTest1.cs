@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace api.test.Controllers
+namespace OutreachOperations.Api.Test.Controllers
 {
     public class UnitTest1
     {

@@ -1,4 +1,4 @@
-﻿namespace Api.Domain
+﻿namespace OutreachOperations.Api.Domain
 {
     public interface IRepository  
     {
