@@ -40,8 +40,8 @@ namespace OutreachOperations.Api.Controllers.Security
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var token = new JwtSecurityToken(
-                    "yourdomain.com",
-                    "yourdomain.com",
+                    _configuration["Domain"],
+                    _configuration["Domain"],
                     claims,
                     expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: creds);

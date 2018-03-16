@@ -9,7 +9,12 @@ namespace OutreachOperations.Api.Infrastructure
 {
     public class DapperRepository : IRepository
     {
-        public IConfiguration Configuration { get; set; }
+        public DapperRepository(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        private IConfiguration Configuration { get; }
 
 
         public long Insert<T>(T item) where T : class

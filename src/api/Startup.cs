@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using OutreachOperations.Api.Domain;
+using OutreachOperations.Api.Infrastructure;
 
 namespace OutreachOperations.Api
 {
@@ -30,12 +32,14 @@ namespace OutreachOperations.Api
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = "yourdomain.com",
-                        ValidAudience = "yourdomain.com",
+                        ValidIssuer = _config["Domain"],
+                        ValidAudience = _config["Domain"],
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(_config["JWTKey"]))
                     };
                 });
+
+            services.AddTransient<IRepository,DapperRepository>();
 
             services.AddMvc();
         }

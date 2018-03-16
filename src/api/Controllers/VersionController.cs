@@ -1,17 +1,22 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
 using Dapper.Contrib.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using OutreachOperations.Api.Domain;
 
 namespace OutreachOperations.Api.Controllers
 {
     public class Version
     {
         [Key]
-        public int VersionId { get; set; }
-        public string DatabaseVersion { get; set; }
+        public int Id { get; set; }
+
+        public int Major { get; set; }
+
+        public int Minor { get; set; }  
+
+        public int Revision { get; set; }
+
 
         [Computed]
         public string SoftwareVersion { get; set; }
@@ -22,10 +27,12 @@ namespace OutreachOperations.Api.Controllers
     public class VersionController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly IRepository _repository;
 
-        public VersionController(IConfiguration config)
+        public VersionController(IConfiguration config,IRepository repository)
         {
             _configuration = config;
+            _repository = repository;
         }
 
         [HttpGet]
@@ -34,17 +41,7 @@ namespace OutreachOperations.Api.Controllers
             Version item = null;
             try
             {
-                var connectionstring = _configuration.GetConnectionString("ReadWriteConnectionString");
-                using (IDbConnection sqlConnection = new SqlConnection(connectionstring))
-                {
-                    sqlConnection.Open();
-
-                    item = sqlConnection.Get<Version>(1);
-
-                    sqlConnection.Close();
-
-                    item.SoftwareVersion = "1";
-                }
+                item = _repository.FindById<Version>(1);
             }
             catch (Exception ex)
             {

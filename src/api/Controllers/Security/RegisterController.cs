@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 namespace OutreachOperations.Api.Controllers.Security
 {
     [Route("login")]
-
     public class RegisterController : Controller
     {
         private readonly IConfiguration _configuration;
