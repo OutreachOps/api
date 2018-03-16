@@ -14,10 +14,10 @@ namespace OutreachOperations.Api.Test.Infrastructure
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            var dapperRepository = new DapperRepository();
-            dapperRepository.Configuration = config;
-
-            var id = dapperRepository.Insert(new Version {DatabaseVersion = "A unit test version"});
+//            var dapperRepository = new DapperRepository(config[""]);
+//            dapperRepository.Configuration = config;
+//
+//            var id = dapperRepository.Insert(new Version {DatabaseVersion = "A unit test version"});
             
         }
     }
