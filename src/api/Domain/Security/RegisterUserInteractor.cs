@@ -4,9 +4,13 @@ namespace OutreachOperations.Api.Domain.Security
 {
     public class RegisterUserInteractor
     {
-        public RegisterUserInteractor(IRepository repository)
+        private readonly FindUserQuery _userQuery;
+        private readonly FindUserQueryByEmail _emailQuery;
+
+        public RegisterUserInteractor(FindUserQuery userQuery, FindUserQueryByEmail emailQuery)
         {
-            
+            _userQuery = userQuery;
+            _emailQuery = emailQuery;
         }
         public RegistrationResult Execute(RegistrationRequest request)
         {
@@ -27,7 +31,15 @@ namespace OutreachOperations.Api.Domain.Security
             if (string.IsNullOrEmpty(request.Username))
                 result.ResultMessage = "An username is required to register";
 
-            
+            if (!string.IsNullOrEmpty(result.ResultMessage))
+                return result;
+
+            if (_userQuery.Execute(request.Username) == null)
+                result.ResultMessage = "Username exists, please choose another";
+
+            if (_emailQuery.Execute(request.EmailAddress) == null)
+                result.ResultMessage = "Email address exists";
+
 
             return result;
         }

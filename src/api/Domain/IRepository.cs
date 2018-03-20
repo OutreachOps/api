@@ -8,7 +8,7 @@ namespace OutreachOperations.Api.Domain
     void Remove<T>(T item);
     void Update<T>(T item);
     T FindById<T>(int id) where T : class;
-        T Find<T>();
+    T Find<T>();
 
     }
 }
