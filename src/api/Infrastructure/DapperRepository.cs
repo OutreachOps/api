@@ -58,5 +58,10 @@ namespace OutreachOperations.Api.Infrastructure
 
             return item;
         }
+
+        public T Find<T>()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
