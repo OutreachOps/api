@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using OutreachOperations.Api.Domain.Security;
 
 namespace OutreachOperations.Api.Controllers.Security
@@ -19,9 +18,12 @@ namespace OutreachOperations.Api.Controllers.Security
         [HttpPost]
         public IActionResult RequestToken([FromBody] RegistrationRequest request)
         {
-            _interactor.Execute(request);
+            var result = _interactor.Execute(request);
 
-            return BadRequest("Could not verify username and password");
+            if (string.IsNullOrEmpty(result.ResultMessage))
+                return Ok();
+
+            return BadRequest(result.ResultMessage);
         }
 
 
