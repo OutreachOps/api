@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using OutreachOperations.Api.Domain;
+using OutreachOperations.Api.Domain.Security;
 using OutreachOperations.Api.Infrastructure;
 
 namespace OutreachOperations.Api
@@ -39,7 +40,14 @@ namespace OutreachOperations.Api
                     };
                 });
 
+
+            services.AddTransient<FindUserQuery, FindUserQueryDapper>();
+            services.AddTransient<FindUserQueryByEmail, FindUserQueryByEmailDapper>();
+
             services.AddTransient<IRepository,DapperRepository>();
+
+            services.AddTransient<RegisterUserInteractor, RegisterUserInteractor>();
+
 
             services.AddMvc();
         }

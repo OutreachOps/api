@@ -1,37 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using OutreachOperations.Api.Domain.Security;
 
 namespace OutreachOperations.Api.Controllers.Security
 {
-    [Route("login")]
+    [Route("register")]
     public class RegisterController : Controller
     {
-        private readonly IConfiguration _configuration;
+        private readonly RegisterUserInteractor _interactor;
 
-        RegisterController(IConfiguration configuration)
+        public RegisterController(RegisterUserInteractor interactor)
         {
-            _configuration = configuration;
-        }
-
-        public class RegistrationRequest
-        {
-            public string EmailAddress { get; set; }
-
-            public string Username { get; set; }
-            public string Password { get; set; }
+            _interactor = interactor;
         }
 
         [AllowAnonymous]
         [HttpPost]
         public IActionResult RequestToken([FromBody] RegistrationRequest request)
         {
-            //check required fields on request
+            var result = _interactor.Execute(request);
 
-            //check whether email address exists.
-            //check whether username exists.
+            if (string.IsNullOrEmpty(result.ResultMessage))
+                return Ok();
 
-            return BadRequest("Could not verify username and password");
+            return BadRequest(result.ResultMessage);
         }
 
 
