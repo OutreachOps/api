@@ -1,16 +1,16 @@
-﻿using System;
-
-namespace OutreachOperations.Api.Domain.Security
+﻿namespace OutreachOperations.Api.Domain.Security
 {
     public class RegisterUserInteractor
     {
         private readonly FindUserQuery _userQuery;
         private readonly FindUserQueryByEmail _emailQuery;
+        private readonly IRepository _repository;
 
-        public RegisterUserInteractor(FindUserQuery userQuery, FindUserQueryByEmail emailQuery)
+        public RegisterUserInteractor(FindUserQuery userQuery, FindUserQueryByEmail emailQuery,IRepository repository)
         {
             _userQuery = userQuery;
             _emailQuery = emailQuery;
+            _repository = repository;
         }
         public RegistrationResult Execute(RegistrationRequest request)
         {
@@ -18,9 +18,6 @@ namespace OutreachOperations.Api.Domain.Security
 
             //check whether password is complex enough
             //check whether email address is valid
-
-            //check whether email has already been used
-            //check whether username has already been used
 
             if (string.IsNullOrEmpty(request.Password))
                 result.ResultMessage = "Password is required to register";
@@ -34,12 +31,22 @@ namespace OutreachOperations.Api.Domain.Security
             if (!string.IsNullOrEmpty(result.ResultMessage))
                 return result;
 
-            if (_userQuery.Execute(request.Username) == null)
+            if (_userQuery.Execute(request.Username) != null)
                 result.ResultMessage = "Username exists, please choose another";
 
-            if (_emailQuery.Execute(request.EmailAddress) == null)
+            if (_emailQuery.Execute(request.EmailAddress) != null)
                 result.ResultMessage = "Email address exists";
 
+            if (!string.IsNullOrEmpty(result.ResultMessage))
+                return result;
+
+
+            _repository.Insert(new User()
+            {
+                EmailAddress = request.EmailAddress,
+                PasswordHash = request.Password,
+                UserName = request.Username
+            });
 
             return result;
         }

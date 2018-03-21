@@ -5,20 +5,22 @@ using OutreachOperations.Api.Domain.Security;
 
 namespace OutreachOperations.Api.Controllers.Security
 {
-    [Route("login")]
+    [Route("register")]
     public class RegisterController : Controller
     {
-        private readonly IConfiguration _configuration;
+        private readonly RegisterUserInteractor _interactor;
 
-        RegisterController(IConfiguration configuration)
+        public RegisterController(RegisterUserInteractor interactor)
         {
-            _configuration = configuration;
+            _interactor = interactor;
         }
 
         [AllowAnonymous]
         [HttpPost]
         public IActionResult RequestToken([FromBody] RegistrationRequest request)
         {
+            _interactor.Execute(request);
+
             return BadRequest("Could not verify username and password");
         }
 
