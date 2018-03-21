@@ -16,7 +16,7 @@ namespace OutreachOperations.Api.Controllers.Security
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult RequestToken([FromBody] RegistrationRequest request)
+        public IActionResult Register([FromBody] RegistrationRequest request)
         {
             var result = _interactor.Execute(request);
 

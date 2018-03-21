@@ -6,13 +6,18 @@
         private readonly FindUserQueryByEmail _emailQuery;
         private readonly IRepository _repository;
 
+        public RegisterUserInteractor()
+        {
+
+        }
+
         public RegisterUserInteractor(FindUserQuery userQuery, FindUserQueryByEmail emailQuery,IRepository repository)
         {
             _userQuery = userQuery;
             _emailQuery = emailQuery;
             _repository = repository;
         }
-        public RegistrationResult Execute(RegistrationRequest request)
+        public virtual RegistrationResult Execute(RegistrationRequest request)
         {
             var result = new RegistrationResult();
 
@@ -31,6 +36,7 @@
             if (!string.IsNullOrEmpty(result.ResultMessage))
                 return result;
 
+            //TODO:Change query objects to Query Processor
             if (_userQuery.Execute(request.Username) != null)
                 result.ResultMessage = "Username exists, please choose another";
 
@@ -41,7 +47,7 @@
                 return result;
 
 
-            _repository.Insert(new User()
+            _repository.Insert(new User
             {
                 EmailAddress = request.EmailAddress,
                 PasswordHash = request.Password,
