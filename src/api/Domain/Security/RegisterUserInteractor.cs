@@ -5,17 +5,19 @@
         private readonly FindUserQuery _userQuery;
         private readonly FindUserQueryByEmail _emailQuery;
         private readonly IRepository _repository;
+        private readonly PasswordHash _passwordHash;
 
         public RegisterUserInteractor()
         {
 
         }
 
-        public RegisterUserInteractor(FindUserQuery userQuery, FindUserQueryByEmail emailQuery,IRepository repository)
+        public RegisterUserInteractor(FindUserQuery userQuery, FindUserQueryByEmail emailQuery,IRepository repository,PasswordHash passwordHash)
         {
             _userQuery = userQuery;
             _emailQuery = emailQuery;
             _repository = repository;
+            _passwordHash = passwordHash;
         }
         public virtual RegistrationResult Execute(RegistrationRequest request)
         {
@@ -46,11 +48,12 @@
             if (!string.IsNullOrEmpty(result.ResultMessage))
                 return result;
 
+            var passwordHash = _passwordHash.HashPassword(request.EmailAddress);
 
             _repository.Insert(new User
             {
                 EmailAddress = request.EmailAddress,
-                PasswordHash = request.Password,
+                PasswordHash = passwordHash,
                 UserName = request.Username
             });
 

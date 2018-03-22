@@ -41,6 +41,7 @@ namespace OutreachOperations.Api
                 });
 
 
+            services.AddTransient<PasswordHash, BCryptPasswordHash>();
             services.AddTransient<FindUserQuery, FindUserQueryDapper>();
             services.AddTransient<FindUserQueryByEmail, FindUserQueryByEmailDapper>();
 

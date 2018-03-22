@@ -1,6 +1,6 @@
 ﻿namespace OutreachOperations.Api.Domain.Security
 {
-    interface PasswordHash
+    public interface PasswordHash
     {
         string HashPassword(string password);
         bool VerifyPassword(string password, string passwordHash);

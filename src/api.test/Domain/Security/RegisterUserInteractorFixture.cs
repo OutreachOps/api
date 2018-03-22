@@ -10,7 +10,7 @@ namespace OutreachOperations.Api.Test.Domain.Security
         [Fact]
         public void Execute_RegisterUser_RequiresPassword()
         {
-            var interactor = RegisterUserInteractor(null, null, null);
+            var interactor = RegisterUserInteractor(null, null, null,null);
 
             var result = interactor.Execute(
                 GetRequest("email@email.com", "username", ""));
@@ -21,7 +21,7 @@ namespace OutreachOperations.Api.Test.Domain.Security
         [Fact]
         public void Execute_RegisterUser_RequiresEmailAddress()
         {
-            var interactor = RegisterUserInteractor(null, null, null);
+            var interactor = RegisterUserInteractor(null, null, null,null);
 
             var result = interactor.Execute(GetRequest("", "username", "password"));
 
@@ -31,7 +31,7 @@ namespace OutreachOperations.Api.Test.Domain.Security
         [Fact]
         public void Execute_RegisterUser_RequiresUserName()
         {
-            var interactor = RegisterUserInteractor(null, null, null);
+            var interactor = RegisterUserInteractor(null, null, null,null);
 
             var result = interactor.Execute(GetRequest("email@email.com", "", "password"));
 
@@ -47,7 +47,7 @@ namespace OutreachOperations.Api.Test.Domain.Security
             var emailQuery = new Mock<FindUserQueryByEmail>();
             emailQuery.Setup(x => x.Execute("email@email.com")).Returns((User)null);
 
-            var interactor = RegisterUserInteractor(userQuery.Object, emailQuery.Object, null);
+            var interactor = RegisterUserInteractor(userQuery.Object, emailQuery.Object, null, null);
 
             var result = interactor.Execute(GetRequest("email@email.com", "username", "password"));
 
@@ -65,7 +65,7 @@ namespace OutreachOperations.Api.Test.Domain.Security
             var emailQuery = new Mock<FindUserQueryByEmail>();
             emailQuery.Setup(x => x.Execute("email@email.com")).Returns(new User());
 
-            var interactor = RegisterUserInteractor(userQuery.Object, emailQuery.Object, null);
+            var interactor = RegisterUserInteractor(userQuery.Object, emailQuery.Object, null,null);
 
             var result = interactor.Execute(GetRequest("email@email.com", "username", "password"));
 
@@ -87,7 +87,10 @@ namespace OutreachOperations.Api.Test.Domain.Security
             var repository = new Mock<IRepository>();
             repository.Setup(x => x.Insert(It.IsAny<User>()));
 
-            var interactor = RegisterUserInteractor(userQuery.Object, emailQuery.Object, repository.Object);
+            var passwordHash = new Mock<PasswordHash>();
+            passwordHash.Setup(x => x.HashPassword("password"));
+
+            var interactor = RegisterUserInteractor(userQuery.Object, emailQuery.Object, repository.Object, passwordHash.Object);
 
             var result = interactor.Execute(GetRequest("email@email.com", "username", "password"));
 
@@ -108,9 +111,10 @@ namespace OutreachOperations.Api.Test.Domain.Security
             };
         }
 
-        private static RegisterUserInteractor RegisterUserInteractor(FindUserQuery findUserQuery, FindUserQueryByEmail findUserQueryByEmail, IRepository repository)
+        private static RegisterUserInteractor RegisterUserInteractor(FindUserQuery findUserQuery,
+            FindUserQueryByEmail findUserQueryByEmail, IRepository repository,PasswordHash hash)
         {
-            var interactor = new RegisterUserInteractor(findUserQuery, findUserQueryByEmail, repository);
+            var interactor = new RegisterUserInteractor(findUserQuery, findUserQueryByEmail, repository, hash);
             return interactor;
         }
 
