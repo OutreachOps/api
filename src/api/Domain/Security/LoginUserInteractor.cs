@@ -4,7 +4,7 @@
     {
         private readonly FindUserQueryByEmail _emailQueryObject;
 
-        public LoginUserInteractor(FindUserQueryByEmail emailQueryObject, PasswordHash pwh)
+        public LoginUserInteractor(FindUserQueryByEmail emailQueryObject)
         {
             _emailQueryObject = emailQueryObject;
         }
