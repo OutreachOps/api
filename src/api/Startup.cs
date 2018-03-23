@@ -47,7 +47,9 @@ namespace OutreachOperations.Api
 
             services.AddTransient<IRepository,DapperRepository>();
 
+
             services.AddTransient<RegisterUserInteractor, RegisterUserInteractor>();
+            services.AddTransient<LoginUserInteractor, LoginUserInteractor>();
 
 
             services.AddMvc();

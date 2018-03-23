@@ -9,7 +9,12 @@
             _emailQueryObject = emailQueryObject;
         }
 
-        public LoginResponse Execute(LoginRequest request)
+        public LoginUserInteractor()
+        {
+
+        }
+
+        public virtual LoginResponse Execute(LoginRequest request)
         {
             var user =  _emailQueryObject.Execute(request.EmailAddress);
 

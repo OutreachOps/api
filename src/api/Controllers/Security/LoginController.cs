@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using OutreachOperations.Api.Domain.Security;
 
 namespace OutreachOperations.Api.Controllers.Security
 {
@@ -13,13 +14,15 @@ namespace OutreachOperations.Api.Controllers.Security
     public class LoginController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly LoginUserInteractor _interactor;
 
-        public LoginController(IConfiguration configuration)
+        public LoginController(IConfiguration configuration,LoginUserInteractor interactor)
         {
             _configuration = configuration;
+            _interactor = interactor;
         }
 
-        public class TokenRequest
+        public class LoginRequest
         {
             public string Username { get; set; }
             public string Password { get; set; }
@@ -27,9 +30,12 @@ namespace OutreachOperations.Api.Controllers.Security
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult RequestToken([FromBody] TokenRequest request)
+        public IActionResult Login([FromBody] LoginRequest request)
         {
-            if (request.Username == "Jon" && request.Password == "Again, not for production use, DEMO ONLY!")
+            var result = _interactor.Execute(new Domain.Security.LoginRequest
+                {EmailAddress = request.Username, Password = request.Password});
+
+            if (result.ResponseMessage == "User Logged In")
             {
                 var claims = new[]
                 {
@@ -54,7 +60,5 @@ namespace OutreachOperations.Api.Controllers.Security
 
             return BadRequest("Could not verify username and password");
         }
-
-
     }
 }

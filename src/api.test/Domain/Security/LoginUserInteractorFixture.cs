@@ -18,7 +18,7 @@ namespace OutreachOperations.Api.Test.Domain.Security
             emailQuery.Setup(x => x.Execute(_emailAddress)).Returns(new User
                 { EmailAddress = _emailAddress,PasswordHash = hashedPassword });
 
-            var interactor = new LoginUserInteractor(emailQuery.Object,pwh);
+            var interactor = new LoginUserInteractor(emailQuery.Object);
 
             var result = interactor.Execute(new LoginRequest{EmailAddress = _emailAddress,Password = "The incorrect password"});
 
@@ -28,12 +28,10 @@ namespace OutreachOperations.Api.Test.Domain.Security
         [Fact]
         public void Execute_EmailAddressNotFound_UserNotLoggedIn()
         {
-            BCryptPasswordHash pwh = new BCryptPasswordHash();
-
             var emailQuery = new Mock<FindUserQueryByEmail>();
             emailQuery.Setup(x => x.Execute(_emailAddress)).Returns((User)null);
 
-            var interactor = new LoginUserInteractor(emailQuery.Object, pwh);
+            var interactor = new LoginUserInteractor(emailQuery.Object);
 
             var result = interactor.Execute(new LoginRequest { EmailAddress = _emailAddress, Password = "AReallyStringPassword" });
 
@@ -51,7 +49,7 @@ namespace OutreachOperations.Api.Test.Domain.Security
                 { EmailAddress = _emailAddress, PasswordHash = hashedPassword });
 
 
-            var interactor = new LoginUserInteractor(emailQuery.Object, pwh);
+            var interactor = new LoginUserInteractor(emailQuery.Object);
 
             var result = interactor.Execute(new LoginRequest { EmailAddress = _emailAddress, Password = "AReallyStringPassword" });
 
