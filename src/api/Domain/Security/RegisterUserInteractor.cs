@@ -48,7 +48,7 @@
             if (!string.IsNullOrEmpty(result.ResultMessage))
                 return result;
 
-            var passwordHash = _passwordHash.HashPassword(request.EmailAddress);
+            var passwordHash = _passwordHash.HashPassword(request.Password);
 
             _repository.Insert(new User
             {

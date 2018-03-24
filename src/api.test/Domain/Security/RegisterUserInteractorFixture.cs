@@ -103,7 +103,8 @@ namespace OutreachOperations.Api.Test.Domain.Security
             repository.Verify();
             userQuery.Verify();
             emailQuery.Verify();
-            passwordHash.Verify();
+            passwordHash.Verify(x=> x.HashPassword(It.Is<string>(s=> s.Equals(_password))),Times.Exactly(1));
+
         }
 
         private static RegistrationRequest GetRequest(string emailAddress, string username, string password)
